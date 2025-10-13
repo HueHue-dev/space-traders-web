@@ -6,6 +6,7 @@ import AccountLogin from '@/views/AccountLogin.vue'
 import Factions from '@/views/Factions.vue'
 import Contracts from '@/views/Contracts.vue'
 import { authService } from '@/services/AuthService.ts'
+import { configService } from '@/services/ConfigService.ts'
 
 const requireAccountAuthRoute: RouteRecordNameGeneric[] = ['Account']
 
@@ -39,6 +40,11 @@ router.beforeEach(async (to) => {
   }
   if (to.meta.requiresAuth && !authService.isAgentAuthenticated()) {
     return '/agent/login'
+  }
+  if(to.name === undefined) {
+    configService.setActiveMenu('Dashboard')
+
+    return '/'
   }
 })
 

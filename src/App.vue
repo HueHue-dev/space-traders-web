@@ -1,9 +1,29 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { configService } from '@/services/ConfigService.ts'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 const leftDrawerOpen = ref(false)
 
-const activeMenu = ref('Dashboard')
+const activeMenu = ref(configService.getActiveMenu())
+
+watch(
+  () => route.name,
+  (newRouteName) => {
+    if (newRouteName) {
+      const menuItem = menuList.find((item) => {
+        return item.link === route.path
+      })
+      if (menuItem) {
+        configService.setActiveMenu(menuItem.label)
+      }
+    }
+  },
+  { immediate: true },
+)
+
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
@@ -95,7 +115,9 @@ const menuList: MenuListItem[] = [
               :disable="menuItem.isDisabled"
               :active="menuItem.label === activeMenu"
               v-ripple
-              @click="activeMenu = menuItem.label"
+              @click="
+                configService.setActiveMenu(menuItem.label)
+              "
             >
               <q-item-section avatar>
                 <q-icon :name="menuItem.icon" />
