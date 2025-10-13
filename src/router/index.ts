@@ -37,7 +37,7 @@ router.beforeEach(async (to) => {
   if (
     to.meta.requiresAuth &&
     requireAccountAuthRoute.includes(to.name) &&
-    !authService.isAgentAuthenticated()
+    !authService.isAccountAuthenticated()
   ) {
     document.title = 'Space Traders - Account Login'
     return '/account/login'
