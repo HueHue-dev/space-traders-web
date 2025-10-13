@@ -54,7 +54,7 @@ const menuList: MenuListItem[] = [
   {
     icon: 'send',
     label: 'My agent',
-    separator: true,
+    separator: false,
     link: '/my/agent',
   },
   {
