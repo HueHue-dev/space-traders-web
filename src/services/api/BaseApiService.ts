@@ -1,9 +1,6 @@
 import Axios, { type AxiosInstance } from 'axios'
 import { type AxiosCacheInstance, setupCache, buildWebStorage } from 'axios-cache-interceptor'
 import Bottleneck from 'bottleneck'
-import type { Faction } from '@/models/faction.ts'
-import type { Contract } from '@/models/contract.ts'
-import type { Agent } from '@/models/agent.ts'
 
 export enum RequestType {
   GET = 'GET',
