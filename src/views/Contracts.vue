@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { Loading, type QTableProps } from 'quasar'
-import type { Contract } from '@/models/contract.ts'
+import { onMounted } from 'vue'
+import { type QTableProps } from 'quasar'
 import { apiManager } from '@/services/api/ApiManagerService.ts'
+import { usePagination } from '@/composables/usePagination.ts'
+import type { Contract } from '@/models/contract.ts'
 
-const contracts = ref<Contract[]>([])
+const agentApi = apiManager.getAgentApi()
+
+const { data: contracts, loading, pagination, onRequest, initialize } = usePagination<Contract>(
+  (page, limit) => agentApi.getContracts(page, limit),
+  'name'
+)
 
 onMounted(() => {
-  const agentApi = apiManager.getAgentApi()
-  Loading.show()
-  agentApi.getContracts(1).then((response) => {
-    contracts.value = response
-    Loading.hide()
-  })
+  initialize()
 })
 
 const columns: QTableProps['columns'] = [
@@ -57,9 +58,12 @@ const columns: QTableProps['columns'] = [
       :rows="contracts"
       :columns="columns"
       row-key="id"
+      :loading="loading"
       separator="horizontal"
       no-data-label="Couldn't find any contracts"
       :rowsPerPageOptions="[5, 10, 20]"
+      @request="onRequest"
+      v-model:pagination="pagination"
     />
   </div>
 </template>

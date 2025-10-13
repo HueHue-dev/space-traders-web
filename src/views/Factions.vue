@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { type QTableProps } from 'quasar'
 import type { Faction } from '@/models/faction.ts'
 import { apiManager } from '@/services/api/ApiManagerService.ts'
+import { usePagination } from '@/composables/usePagination.ts'
 
-const factions = ref<Faction[]>([])
-const loading = ref(false)
+const agentApi = apiManager.getAgentApi()
+
+const { data: factions, loading, pagination, onRequest, initialize } = usePagination<Faction>(
+  (page, limit) => agentApi.getFactions(page, limit),
+  'name'
+)
 
 onMounted(() => {
-  const agentApi = apiManager.getAgentApi()
-  loading.value = true
-  agentApi.getAllFactions().then((response) => {
-    factions.value = response
-    loading.value = false
-  })
+  initialize()
 })
 
 const columns: QTableProps['columns'] = [
@@ -47,6 +47,10 @@ const columns: QTableProps['columns'] = [
       row-key="symbol"
       :loading="loading"
       separator="horizontal"
+      no-data-label="Couldn't find any factions"
+      :rowsPerPageOptions="[5, 10, 20]"
+      @request="onRequest"
+      v-model:pagination="pagination"
     />
   </div>
 </template>

@@ -9,6 +9,15 @@ export enum RequestType {
   DELETE = 'DELETE',
 }
 
+export interface PaginatedResponse<T> {
+  data: T[]
+  meta: {
+    total: number
+    page: number
+    limit: number
+  }
+}
+
 export abstract class BaseApiService {
   private axiosInstance: AxiosInstance = Axios.create()
 
@@ -41,14 +50,11 @@ export abstract class BaseApiService {
     url: string,
     requestType: string,
     ttl: number,
-    page: number | null = null,
-  ): Promise<T> {
+    page: number,
+    limit: number = 5
+  ): Promise<PaginatedResponse<T>> {
     return await this.limiter.schedule(async () => {
-      let params: string = ''
-      if (page != null) {
-        params = `?page=${page}`
-      }
-      const response = await this.axios.get(this.baseUrl + url + params, {
+      const response = await this.axios.get(this.baseUrl + url + `?page=${page}&limit=${limit}`, {
         method: requestType,
         headers: {
           Authorization: `Bearer ${this.token}`,
@@ -62,7 +68,7 @@ export abstract class BaseApiService {
         throw new Error('invalid username or token')
       }
 
-      return response.data.data
+      return { data: response.data.data, meta: response.data.meta }
     })
   }
 
