@@ -14,17 +14,18 @@ const requireAccountAuthRoute: RouteRecordNameGeneric[] = ['Account']
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', component: Dashboard, name: 'Dashboard', meta: { requiresAuth: true } },
-    { path: '/account', component: Account, name: 'Account', meta: { requiresAuth: true } },
-    { path: '/agents', component: Agents, name: 'Agents', meta: { requiresAuth: true } },
-    { path: '/factions', component: Factions, name: 'Factions', meta: { requiresAuth: true } },
-    { path: '/contracts', component: Contracts, name: 'Contracts', meta: { requiresAuth: true } },
-    { path: '/account/login', component: AccountLogin, name: 'AccountLogin' },
-    { path: '/agent/login', component: AgentLogin, name: 'AgentLogin' },
+    { path: '/', component: Dashboard, name: 'Dashboard', meta: { requiresAuth: true, title: 'Dashboard'} },
+    { path: '/account', component: Account, name: 'Account', meta: { requiresAuth: true, title: 'Account' } },
+    { path: '/agents', component: Agents, name: 'Agents', meta: { requiresAuth: true, title: 'Agents' } },
+    { path: '/factions', component: Factions, name: 'Factions', meta: { requiresAuth: true, title: 'Factions' } },
+    { path: '/contracts', component: Contracts, name: 'Contracts', meta: { requiresAuth: true, title: 'Contracts' } },
+    { path: '/account/login', component: AccountLogin, name: 'AccountLogin', meta: { title: 'Account Login' } },
+    { path: '/agent/login', component: AgentLogin, name: 'AgentLogin', meta: { title: 'Agent Login' } },
     {
       path: '/logout',
       component: {},
       name: 'Logout',
+      meta: { title: 'Logout' },
       beforeEnter: () => {
         authService.clearAll()
       },
@@ -38,16 +39,19 @@ router.beforeEach(async (to) => {
     requireAccountAuthRoute.includes(to.name) &&
     !authService.isAgentAuthenticated()
   ) {
+    document.title = 'Space Traders - Account Login'
     return '/account/login'
   }
   if (to.meta.requiresAuth && !authService.isAgentAuthenticated()) {
+    document.title = 'Space Traders - Agent Login'
     return '/agent/login'
   }
   if(to.name === undefined) {
     configService.setActiveMenu('Dashboard')
-
+    document.title = 'Space Traders - Dashboard'
     return '/'
   }
+  document.title = 'Space Traders - ' + to.name.toString()
 })
 
 export default router
