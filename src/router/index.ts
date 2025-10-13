@@ -7,6 +7,7 @@ import Factions from '@/views/Factions.vue'
 import Contracts from '@/views/Contracts.vue'
 import { authService } from '@/services/AuthService.ts'
 import { configService } from '@/services/ConfigService.ts'
+import Agents from '@/views/Agents.vue'
 
 const requireAccountAuthRoute: RouteRecordNameGeneric[] = ['Account']
 
@@ -15,6 +16,7 @@ const router = createRouter({
   routes: [
     { path: '/', component: Dashboard, name: 'Dashboard', meta: { requiresAuth: true } },
     { path: '/account', component: Account, name: 'Account', meta: { requiresAuth: true } },
+    { path: '/agents', component: Agents, name: 'Agents', meta: { requiresAuth: true } },
     { path: '/factions', component: Factions, name: 'Factions', meta: { requiresAuth: true } },
     { path: '/contracts', component: Contracts, name: 'Contracts', meta: { requiresAuth: true } },
     { path: '/account/login', component: AccountLogin, name: 'AccountLogin' },
