@@ -9,12 +9,12 @@ const toggleLeftDrawer = () => {
 }
 
 type MenuListItem = {
-  icon: string,
-  label: string,
-  separator: boolean,
-  link: string,
-  iconColor?: string,
-  isDisabled?: boolean,
+  icon: string
+  label: string
+  separator: boolean
+  link: string
+  iconColor?: string
+  isDisabled?: boolean
 }
 
 const menuList: MenuListItem[] = [
@@ -23,40 +23,51 @@ const menuList: MenuListItem[] = [
     label: 'Account - coming soon',
     separator: true,
     link: '/account',
-    isDisabled: true
+    isDisabled: true,
   },
   {
     icon: 'send',
     label: 'Dashboard',
     separator: false,
-    link: '/'
+    link: '/',
   },
   {
     icon: 'send',
     label: 'My agent',
     separator: true,
-    link: '/my/agent'
+    link: '/my/agent',
+  },
+  {
+    icon: 'send',
+    label: 'Contracts',
+    separator: true,
+    link: '/contracts',
   },
   {
     icon: 'send',
     label: 'Agents',
     separator: false,
-    link: '/factions'
+    link: '/agents',
   },
   {
     icon: 'send',
     label: 'Factions',
     separator: true,
-    link: '/factions'
+    link: '/factions',
   },
   {
     icon: 'settings',
     label: 'Settings',
     separator: false,
-    link: '/settings'
-  }
+    link: '/settings',
+  },
+  {
+    icon: 'logout',
+    label: 'Logout',
+    separator: false,
+    link: '/logout',
+  },
 ]
-
 </script>
 
 <template>
@@ -67,7 +78,7 @@ const menuList: MenuListItem[] = [
 
         <q-toolbar-title>
           <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
+            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
           </q-avatar>
           Space-Traders
         </q-toolbar-title>
@@ -93,7 +104,7 @@ const menuList: MenuListItem[] = [
                 {{ menuItem.label }}
               </q-item-section>
             </q-item>
-            <q-separator :key="'sep' + index"  v-if="menuItem.separator" />
+            <q-separator :key="'sep' + index" v-if="menuItem.separator" />
           </template>
         </q-list>
       </q-scroll-area>
@@ -102,6 +113,5 @@ const menuList: MenuListItem[] = [
     <q-page-container>
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
