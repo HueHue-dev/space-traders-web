@@ -1,14 +1,14 @@
 export interface Faction {
-  symbole: string
+  symbol: string
   name: string
   description: string
-  headquaters: string
+  headquarters: string
   traits: Trait[]
   isRecruiting: boolean
 }
 
 export interface Trait {
-  symbole: string
+  symbol: string
   name: string
   description: string
 }

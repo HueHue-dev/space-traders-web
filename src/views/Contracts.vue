@@ -18,7 +18,7 @@ onMounted(() => {
 const columns: QTableProps['columns'] = [
   {
     name: 'factionSymbol',
-    label: 'Faction symbole',
+    label: 'Faction symbol',
     field: 'factionSymbol',
     align: 'left',
     sortable: true,
@@ -59,6 +59,7 @@ const columns: QTableProps['columns'] = [
       row-key="id"
       separator="horizontal"
       no-data-label="Couldn't find any contracts"
+      :rowsPerPageOptions="[5, 10, 20]"
     />
   </div>
 </template>

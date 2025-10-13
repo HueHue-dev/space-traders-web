@@ -20,9 +20,9 @@ const columns: QTableProps['columns'] = [
   { name: 'name', label: 'Name', field: 'name', align: 'left', sortable: true },
   { name: 'description', label: 'Description', field: 'description', align: 'left' },
   {
-    name: 'headquaters',
-    label: 'Headquaters',
-    field: 'headquaters',
+    name: 'headquarters',
+    label: 'Headquarters',
+    field: 'headquarters',
     align: 'left',
     sortable: true,
   },
@@ -44,7 +44,7 @@ const columns: QTableProps['columns'] = [
       title="Factions"
       :rows="factions"
       :columns="columns"
-      row-key="symbole"
+      row-key="symbol"
       :loading="loading"
       separator="horizontal"
     />
