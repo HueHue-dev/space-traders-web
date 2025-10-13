@@ -5,6 +5,7 @@ import {
 } from 'axios-cache-interceptor'
 import Bottleneck from 'bottleneck';
 import type { Faction } from '@/models/faction.ts'
+import type { Agent } from '@/models/agent.ts'
 
 const ONE_HOUR = 1000 * 60 * 60;
 
@@ -44,16 +45,24 @@ export class ApiService {
   }
 
   async getFactions<T>(page: number): Promise<Faction[]> {
-    return await this.request<Faction[]>('factions', RequestType.GET, page, ONE_HOUR);
+    return await this.request<Faction[]>('factions', RequestType.GET, ONE_HOUR, page);
   }
 
   async getAllFactions<T>(): Promise<Faction[]> {
     return await this.requestAll<Faction>('factions', RequestType.GET, ONE_HOUR)
   }
 
-  private async request<T>(url: string, requestType: string, page: number, ttl: number): Promise<T> {
+  async getMyAgent<T>(): Promise<Agent> {
+    return await this.request<Agent>('my/agent', RequestType.GET, ONE_HOUR);
+  }
+
+  private async request<T>(url: string, requestType: string, ttl: number, page: number|null = null): Promise<T> {
     return await this.limiter.schedule(async () => {
-      const response = await this.axios.get(this.baseUrl + url + `?page=${page}`, {
+      let params: string = '';
+      if (page != null) {
+        params = `?page=${page}`;
+      }
+      const response = await this.axios.get(this.baseUrl + url + params, {
         method: requestType,
         headers: {
           Authorization: `Bearer ${this.token}`,

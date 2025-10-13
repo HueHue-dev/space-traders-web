@@ -1,12 +1,20 @@
-import { ref, computed, type ComputedRef } from 'vue'
+import { ref, computed, type ComputedRef, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useAccountStore = defineStore('account', () => {
-  const id = ref("")
-  const email = ref(null)
-  const token = ref("")
+  const id: Ref<string, string> = ref("")
+  const email: Ref<string, string> = ref("")
+  const token: Ref<string, string> = ref("")
 
-  const isAuthenticated: ComputedRef<boolean> = computed(() => token.value !== "")
+  const isAuthenticated: ComputedRef<boolean> = computed(() => token.value !== "" && email.value !== null)
 
-  return { id, email, token, isAuthenticated }
+  function setToken(t: string) {
+    token.value = t;
+  }
+
+  function setEmail(e: string) {
+    email.value = e;
+  }
+
+  return { email, token, setEmail, setToken, isAuthenticated }
 })
