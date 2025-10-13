@@ -78,7 +78,14 @@ const menuList: MenuListItem[] = [
       <q-scroll-area class="fit">
         <q-list>
           <template v-for="(menuItem, index) in menuList" :key="index">
-            <q-item :to="menuItem.link" clickable :disable="menuItem.isDisabled" :active="menuItem.label === activeMenu" v-ripple @click="activeMenu = menuItem.label">
+            <q-item
+              :to="menuItem.link"
+              clickable
+              :disable="menuItem.isDisabled"
+              :active="menuItem.label === activeMenu"
+              v-ripple
+              @click="activeMenu = menuItem.label"
+            >
               <q-item-section avatar>
                 <q-icon :name="menuItem.icon" />
               </q-item-section>
