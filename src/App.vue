@@ -9,25 +9,6 @@ const leftDrawerOpen = ref(false)
 
 const activeMenu = ref(configService.getActiveMenu())
 
-watch(
-  () => route.name,
-  (newRouteName) => {
-    if (newRouteName) {
-      const menuItem = menuList.find((item) => {
-        return item.link === route.path
-      })
-      if (menuItem) {
-        configService.setActiveMenu(menuItem.label)
-      }
-    }
-  },
-  { immediate: true },
-)
-
-const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
-
 type MenuListItem = {
   icon: string
   label: string
@@ -53,9 +34,10 @@ const menuList: MenuListItem[] = [
   },
   {
     icon: 'send',
-    label: 'My agent',
+    label: 'My agent - coming soon',
     separator: false,
-    link: '/my/agent',
+    link: '/',
+    isDisabled: true,
   },
   {
     icon: 'send',
@@ -77,9 +59,10 @@ const menuList: MenuListItem[] = [
   },
   {
     icon: 'settings',
-    label: 'Settings',
+    label: 'Settings - coming soon',
     separator: false,
-    link: '/settings',
+    link: '/',
+    isDisabled: true,
   },
   {
     icon: 'logout',
@@ -88,6 +71,26 @@ const menuList: MenuListItem[] = [
     link: '/logout',
   },
 ]
+
+watch(
+  () => route.name,
+  (newRouteName) => {
+    if (newRouteName) {
+      const menuItem = menuList.find((item) => {
+        return item.link === route.path
+      })
+      if (menuItem) {
+        configService.setActiveMenu(menuItem.label)
+        activeMenu.value = menuItem.label
+      }
+    }
+  },
+  { immediate: true },
+)
+
+const toggleLeftDrawer = () => {
+  leftDrawerOpen.value = !leftDrawerOpen.value
+}
 </script>
 
 <template>
