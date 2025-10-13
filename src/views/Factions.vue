@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { Loading, type QTableProps } from 'quasar'
-import { useApiStore } from '@/stores/api.ts'
+import { type QTableProps } from 'quasar'
 import type { Faction } from '@/models/faction.ts'
+import { apiManager } from '@/services/api/ApiManagerService.ts'
 
 const factions = ref<Faction[]>([])
+const loading = ref(false)
 
 onMounted(() => {
-  const apiStore = useApiStore()
-  Loading.show()
-  apiStore.apiService?.getAllFactions().then((response) => {
+  const agentApi = apiManager.getAgentApi()
+  loading.value = true
+  agentApi.getAllFactions().then((response) => {
     factions.value = response
-    Loading.hide()
+    loading.value = false
   })
 })
 
@@ -44,6 +45,7 @@ const columns: QTableProps['columns'] = [
       :rows="factions"
       :columns="columns"
       row-key="symbole"
+      :loading="loading"
       separator="horizontal"
     />
   </div>

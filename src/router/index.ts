@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory, type RouteRecordNameGeneric } from 'vue-router'
-import { useAccountStore } from '@/stores/account.ts'
 import AgentLogin from '../views/AgentLogin.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import Account from '@/views/Account.vue'
 import AccountLogin from '@/views/AccountLogin.vue'
-import { useAgentStore } from '@/stores/agent.ts'
 import Factions from '@/views/Factions.vue'
+import Contracts from '@/views/Contracts.vue'
+import { authService } from '@/services/AuthService.ts'
 
-const requireAccountAuthRoute: RouteRecordNameGeneric[] = ['Account'];
+const requireAccountAuthRoute: RouteRecordNameGeneric[] = ['Account']
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,19 +15,29 @@ const router = createRouter({
     { path: '/', component: Dashboard, name: 'Dashboard', meta: { requiresAuth: true } },
     { path: '/account', component: Account, name: 'Account', meta: { requiresAuth: true } },
     { path: '/factions', component: Factions, name: 'Factions', meta: { requiresAuth: true } },
+    { path: '/contracts', component: Contracts, name: 'Contracts', meta: { requiresAuth: true } },
     { path: '/account/login', component: AccountLogin, name: 'AccountLogin' },
     { path: '/agent/login', component: AgentLogin, name: 'AgentLogin' },
+    {
+      path: '/logout',
+      component: {},
+      name: 'Logout',
+      beforeEnter: () => {
+        authService.clearAll()
+      },
+    },
   ],
 })
 
 router.beforeEach(async (to) => {
-  const account = useAccountStore()
-  const agent = useAgentStore()
-
-  if (to.meta.requiresAuth && requireAccountAuthRoute.includes(to.name) && !account.isAuthenticated) {
+  if (
+    to.meta.requiresAuth &&
+    requireAccountAuthRoute.includes(to.name) &&
+    !authService.isAgentAuthenticated()
+  ) {
     return '/account/login'
   }
-  if (to.meta.requiresAuth && !agent.isAuthenticated) {
+  if (to.meta.requiresAuth && !authService.isAgentAuthenticated()) {
     return '/agent/login'
   }
 })

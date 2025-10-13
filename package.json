@@ -19,7 +19,6 @@
     "axios": "^1.12.2",
     "axios-cache-interceptor": "^1.8.3",
     "bottleneck": "^2.19.5",
-    "pinia": "^3.0.3",
     "quasar": "^2.18.5",
     "vue": "^3.5.22",
     "vue-router": "^4.5.1"
