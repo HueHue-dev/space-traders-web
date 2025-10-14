@@ -28,6 +28,7 @@ const router = createRouter({
       meta: { title: 'Logout' },
       beforeEnter: () => {
         authService.clearAll()
+        router.push('/')
       },
     },
   ],
