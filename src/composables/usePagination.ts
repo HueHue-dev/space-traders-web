@@ -1,5 +1,8 @@
 import type { PaginatedResponse } from '@/services/api/BaseApiService.ts'
 import { type Ref, ref } from 'vue'
+import { useQuasar } from 'quasar'
+
+const $q = useQuasar()
 
 export interface PaginationState {
   sortBy: string
@@ -33,8 +36,10 @@ export function usePagination<T>(
 
       return response
     } catch (error) {
-      console.error('Failed to load data:', error)
-      throw error
+      $q.notify({
+        type: 'negative',
+        message: 'Login successful',
+      })
     } finally {
       loading.value = false
     }
@@ -50,7 +55,10 @@ export function usePagination<T>(
       pagination.value.sortBy = sortBy
       pagination.value.descending = descending
     } catch (error) {
-      console.error('Request failed:', error)
+      $q.notify({
+        type: 'negative',
+        message: 'Something went wrong. Please try again.',
+      })
     }
   }
 

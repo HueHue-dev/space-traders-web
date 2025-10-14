@@ -11,9 +11,8 @@ const token = ref('')
 const onAgentLogin = () => {
   authService.setAgentToken(token.value)
   $q.notify({
-    color: 'green-4',
+    type: 'positive',
     textColor: 'white',
-    icon: 'cloud_done',
     message: 'Login successful',
   })
 
