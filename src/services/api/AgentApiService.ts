@@ -3,7 +3,8 @@ import type { Contract } from '@/models/contract.ts'
 import type { Agent } from '@/models/agent.ts'
 import {
   BaseApiService,
-  type PaginatedResponse, type PostResponse,
+  type PaginatedResponse,
+  type PostResponse,
 } from '@/services/api/BaseApiService.ts'
 
 export class AgentApiService extends BaseApiService {

@@ -88,7 +88,7 @@ const accept = async (id: string) => {
 
     const result = await agentApi.acceptContract(id)
 
-    const index = contracts.value.findIndex(c => c.id === id)
+    const index = contracts.value.findIndex((c) => c.id === id)
     if (index !== -1) {
       contracts.value[index] = result.data
     }

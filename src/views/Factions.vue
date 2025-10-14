@@ -56,9 +56,7 @@ const columns: QTableProps['columns'] = [
       @request="onRequest"
       v-model:pagination="pagination"
     >
-      <template v-slot:top-right>
-        Last updated: {{ lastUpdated }}
-      </template>
+      <template v-slot:top-right> Last updated: {{ lastUpdated }} </template>
     </q-table>
   </div>
 </template>

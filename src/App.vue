@@ -118,9 +118,7 @@ const toggleLeftDrawer = () => {
               :disable="menuItem.isDisabled"
               :active="menuItem.label === activeMenu"
               v-ripple
-              @click="
-                configService.setActiveMenu(menuItem.label)
-              "
+              @click="configService.setActiveMenu(menuItem.label)"
             >
               <q-item-section avatar>
                 <q-icon :name="menuItem.icon" />

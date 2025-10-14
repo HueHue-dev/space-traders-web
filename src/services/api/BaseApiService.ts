@@ -60,35 +60,35 @@ export abstract class BaseApiService {
     url: string,
     ttl: number,
     page: number,
-    limit: number = 5
+    limit: number = 5,
   ): Promise<PaginatedResponse<T>> {
     return await this.limiter.schedule(async () => {
-      const response: CacheAxiosResponse = await this.axios.get(this.baseUrl + url + `?page=${page}&limit=${limit}`, {
-        method: RequestType.GET,
-        headers: {
-          Authorization: `Bearer ${this.token}`,
-          'Content-Type': 'application/json',
+      const response: CacheAxiosResponse = await this.axios.get(
+        this.baseUrl + url + `?page=${page}&limit=${limit}`,
+        {
+          method: RequestType.GET,
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+            'Content-Type': 'application/json',
+          },
+          id: url.replace('/', '-'),
+          cache: {
+            ttl: ttl,
+          },
         },
-        id: url.replace('/', '-'),
-        cache: {
-          ttl: ttl,
-        },
-      })
+      )
       if (response.status === 400) {
         throw new Error('invalid username or token')
       }
       if (!response.cached) {
-        response.data.meta.date = new Date("2015-03-25T12:00").toLocaleString();
+        response.data.meta.date = new Date('2015-03-25T12:00').toLocaleString()
       }
 
       return { data: response.data.data, meta: response.data.meta }
     })
   }
 
-  protected async post<T>(
-    url: string,
-    cacheKeysToInvalidate?: string[]
-  ): Promise<PostResponse<T>> {
+  protected async post<T>(url: string, cacheKeysToInvalidate?: string[]): Promise<PostResponse<T>> {
     return await this.limiter.schedule(async () => {
       if (cacheKeysToInvalidate) {
         cacheKeysToInvalidate.forEach((key) => {
@@ -96,15 +96,13 @@ export abstract class BaseApiService {
         })
       }
 
-      const response: CacheAxiosResponse = await this.axios.post(this.baseUrl + url, null,
-  {
-          method: RequestType.POST,
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-            'Content-Type': 'application/json',
-          }
+      const response: CacheAxiosResponse = await this.axios.post(this.baseUrl + url, null, {
+        method: RequestType.POST,
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          'Content-Type': 'application/json',
         },
-      )
+      })
 
       if (response.status === 400) {
         throw new Error('invalid username or token')

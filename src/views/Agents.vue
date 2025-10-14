@@ -7,10 +7,13 @@ import type { Agent } from '@/models/agent.ts'
 
 const agentApi = apiManager.getAgentApi()
 
-const { data: agents, loading, pagination, onRequest, initialize } = usePagination<Agent>(
-  (page, limit) => agentApi.getAgents(page, limit),
-  'symbol'
-)
+const {
+  data: agents,
+  loading,
+  pagination,
+  onRequest,
+  initialize,
+} = usePagination<Agent>((page, limit) => agentApi.getAgents(page, limit), 'symbol')
 
 onMounted(() => {
   initialize()

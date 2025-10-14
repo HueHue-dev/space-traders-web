@@ -14,7 +14,7 @@ export interface PaginationState {
 
 export function usePagination<T>(
   fetchFunction: (page: number, limit: number) => Promise<PaginatedResponse<T>>,
-  initialSortBy: string = 'name'
+  initialSortBy: string = 'name',
 ) {
   const data = ref<T[]>([]) as Ref<T[]>
   const loading = ref(false)
