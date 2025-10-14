@@ -7,7 +7,7 @@ import type { Contract } from '@/models/contract.ts'
 
 const agentApi = apiManager.getAgentApi()
 
-const { data: contracts, loading, pagination, onRequest, initialize } = usePagination<Contract>(
+const { data: contracts, lastUpdated, loading, pagination, onRequest, initialize } = usePagination<Contract>(
   (page, limit) => agentApi.getContracts(page, limit),
   'name'
 )
@@ -64,6 +64,10 @@ const columns: QTableProps['columns'] = [
       :rowsPerPageOptions="[5, 10, 20]"
       @request="onRequest"
       v-model:pagination="pagination"
-    />
+    >
+      <template v-slot:top-right>
+        Last updated: {{ lastUpdated }}
+      </template>
+    </q-table>
   </div>
 </template>

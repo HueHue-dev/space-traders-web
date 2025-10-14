@@ -7,10 +7,14 @@ import { usePagination } from '@/composables/usePagination.ts'
 
 const agentApi = apiManager.getAgentApi()
 
-const { data: factions, loading, pagination, onRequest, initialize } = usePagination<Faction>(
-  (page, limit) => agentApi.getFactions(page, limit),
-  'name'
-)
+const {
+  data: factions,
+  lastUpdated,
+  loading,
+  pagination,
+  onRequest,
+  initialize,
+} = usePagination<Faction>((page, limit) => agentApi.getFactions(page, limit), 'name')
 
 onMounted(() => {
   initialize()
@@ -51,6 +55,10 @@ const columns: QTableProps['columns'] = [
       :rowsPerPageOptions="[5, 10, 20]"
       @request="onRequest"
       v-model:pagination="pagination"
-    />
+    >
+      <template v-slot:top-right>
+        Last updated: {{ lastUpdated }}
+      </template>
+    </q-table>
   </div>
 </template>

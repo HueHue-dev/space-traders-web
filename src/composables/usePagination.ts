@@ -18,7 +18,7 @@ export function usePagination<T>(
 ) {
   const data = ref<T[]>([]) as Ref<T[]>
   const loading = ref(false)
-
+  const lastUpdated = ref('')
   const pagination = ref<PaginationState>({
     sortBy: initialSortBy,
     descending: false,
@@ -33,6 +33,7 @@ export function usePagination<T>(
       const response = await fetchFunction(page, rowsPerPage)
       data.value = response.data
       pagination.value.rowsNumber = response.meta.total
+      lastUpdated.value = response.meta.date
 
       return response
     } catch (error) {
@@ -68,6 +69,7 @@ export function usePagination<T>(
 
   return {
     data,
+    lastUpdated,
     loading,
     pagination,
     onRequest,

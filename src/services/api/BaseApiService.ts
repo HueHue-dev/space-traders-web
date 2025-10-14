@@ -1,5 +1,10 @@
 import Axios, { type AxiosInstance } from 'axios'
-import { type AxiosCacheInstance, setupCache, buildWebStorage } from 'axios-cache-interceptor'
+import {
+  type AxiosCacheInstance,
+  setupCache,
+  buildWebStorage,
+  type CacheAxiosResponse,
+} from 'axios-cache-interceptor'
 import Bottleneck from 'bottleneck'
 
 export enum RequestType {
@@ -12,6 +17,7 @@ export enum RequestType {
 export interface PaginatedResponse<T> {
   data: T[]
   meta: {
+    date: string
     total: number
     page: number
     limit: number
@@ -54,7 +60,7 @@ export abstract class BaseApiService {
     limit: number = 5
   ): Promise<PaginatedResponse<T>> {
     return await this.limiter.schedule(async () => {
-      const response = await this.axios.get(this.baseUrl + url + `?page=${page}&limit=${limit}`, {
+      const response: CacheAxiosResponse = await this.axios.get(this.baseUrl + url + `?page=${page}&limit=${limit}`, {
         method: requestType,
         headers: {
           Authorization: `Bearer ${this.token}`,
@@ -66,6 +72,9 @@ export abstract class BaseApiService {
       })
       if (response.status === 400) {
         throw new Error('invalid username or token')
+      }
+      if (!response.cached) {
+        response.data.meta.date = new Date("2015-03-25T12:00").toLocaleString();
       }
 
       return { data: response.data.data, meta: response.data.meta }
