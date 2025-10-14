@@ -24,6 +24,10 @@ export interface PaginatedResponse<T> {
   }
 }
 
+export interface PostResponse<T> {
+  data: T
+}
+
 export abstract class BaseApiService {
   private axiosInstance: AxiosInstance = Axios.create()
 
@@ -52,20 +56,20 @@ export abstract class BaseApiService {
     })
   }
 
-  protected async request<T>(
+  protected async get<T>(
     url: string,
-    requestType: string,
     ttl: number,
     page: number,
     limit: number = 5
   ): Promise<PaginatedResponse<T>> {
     return await this.limiter.schedule(async () => {
       const response: CacheAxiosResponse = await this.axios.get(this.baseUrl + url + `?page=${page}&limit=${limit}`, {
-        method: requestType,
+        method: RequestType.GET,
         headers: {
           Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',
         },
+        id: url.replace('/', '-'),
         cache: {
           ttl: ttl,
         },
@@ -81,30 +85,33 @@ export abstract class BaseApiService {
     })
   }
 
-  protected async requestAll<T>(url: string, requestType: string, ttl: number): Promise<T[]> {
-    let page = 1
-    let isLastPage = false
-    let data: T[] = []
+  protected async post<T>(
+    url: string,
+    cacheKeysToInvalidate?: string[]
+  ): Promise<PostResponse<T>> {
+    return await this.limiter.schedule(async () => {
+      if (cacheKeysToInvalidate) {
+        cacheKeysToInvalidate.forEach((key) => {
+          this.axios.storage.remove(key)
+        })
+      }
 
-    while (!isLastPage) {
-      const response = await this.axios.get(this.baseUrl + url, {
-        method: requestType,
-        headers: {
-          Authorization: `Bearer ${this.token}`,
-          'Content-Type': 'application/json',
+      const response: CacheAxiosResponse = await this.axios.post(this.baseUrl + url, null,
+  {
+          method: RequestType.POST,
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+            'Content-Type': 'application/json',
+          }
         },
-        cache: {
-          ttl: ttl,
-        },
-      })
+      )
 
-      data.push(...response.data.data)
-      const totalPages = Math.ceil(response.data.meta.total / response.data.meta.limit)
-      isLastPage = page === totalPages
-      page++
-    }
+      if (response.status === 400) {
+        throw new Error('invalid username or token')
+      }
 
-    return data
+      return { data: response.data.data }
+    })
   }
 
   protected get ONE_HOUR(): number {
