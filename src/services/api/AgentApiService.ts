@@ -31,4 +31,8 @@ export class AgentApiService extends BaseApiService {
   async acceptContract(contractId: string): Promise<PostResponse<Contract>> {
     return await this.post<Contract>(`my/contracts/${contractId}/accept`, ['my/contracts'])
   }
+
+  async getShips(page: number, limit: number = 5): Promise<PaginatedResponse<Ship>> {
+    return await this.get<Ship>('my/ships', this.ONE_HOUR, page, limit)
+  }
 }

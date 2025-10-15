@@ -8,6 +8,7 @@ import Contracts from '@/views/Contracts.vue'
 import { authService } from '@/services/AuthService.ts'
 import { configService } from '@/services/ConfigService.ts'
 import Agents from '@/views/Agents.vue'
+import Ships from '@/views/Ships.vue'
 
 const requireAccountAuthRoute: RouteRecordNameGeneric[] = ['Account']
 
@@ -43,6 +44,12 @@ const router = createRouter({
       component: Contracts,
       name: 'Contracts',
       meta: { requiresAuth: true, title: 'Contracts' },
+    },
+    {
+      path: '/ships',
+      component: Ships,
+      name: 'Ships',
+      meta: { requiresAuth: true, title: 'Ships' },
     },
     {
       path: '/account/login',

@@ -88,13 +88,11 @@ export abstract class BaseApiService {
     })
   }
 
-  protected async post<T>(url: string, cacheKeysToInvalidate?: string[]): Promise<PostResponse<T>> {
+  protected async post<T>(url: string, cacheKeysToInvalidate: string[] = []): Promise<PostResponse<T>> {
     return await this.limiter.schedule(async () => {
-      if (cacheKeysToInvalidate) {
         cacheKeysToInvalidate.forEach((key) => {
           this.axios.storage.remove(key)
         })
-      }
 
       const response: CacheAxiosResponse = await this.axios.post(this.baseUrl + url, null, {
         method: RequestType.POST,

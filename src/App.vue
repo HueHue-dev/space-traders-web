@@ -42,8 +42,14 @@ const menuList: MenuListItem[] = [
   {
     icon: 'send',
     label: 'Contracts',
-    separator: true,
+    separator: false,
     link: '/contracts',
+  },
+  {
+    icon: 'send',
+    label: 'Ships',
+    separator: true,
+    link: '/ships',
   },
   {
     icon: 'send',
