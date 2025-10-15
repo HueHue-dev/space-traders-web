@@ -72,9 +72,7 @@ export abstract class BaseApiService {
             'Content-Type': 'application/json',
           },
           id: url.replace('/', '-'),
-          cache: {
-            ttl: ttl,
-          },
+          cache: this.getCacheConfig(ttl),
         },
       )
       if (response.status === 400) {
@@ -112,5 +110,20 @@ export abstract class BaseApiService {
 
   protected get ONE_HOUR(): number {
     return 1000 * 60 * 60
+  }
+
+  private getCacheConfig(ttl: number) {
+    let cacheConfig = {};
+    if (ttl > 0) {
+      cacheConfig = {
+        ttl: ttl,
+      }
+    }else {
+      cacheConfig = {
+        cache: false,
+      }
+    }
+
+    return cacheConfig
   }
 }
