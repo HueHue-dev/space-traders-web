@@ -3,6 +3,9 @@ import { ref } from 'vue'
 import router from '@/router'
 import { useQuasar } from 'quasar'
 import { authService } from '@/services/AuthService.ts'
+import { apiManager } from '@/services/api/ApiManagerService.ts'
+import type { SingleResponse } from '@/services/api/BaseApiService.ts'
+import type { Account } from '@/models/account.ts'
 
 const $q = useQuasar()
 
@@ -10,13 +13,24 @@ const token = ref('')
 
 const onAgentLogin = () => {
   authService.setAgentToken(token.value)
-  $q.notify({
-    type: 'positive',
-    textColor: 'white',
-    message: 'Login successful',
-  })
+  const agentApi = apiManager.getAgentApi()
+  agentApi.getAccount().then((response: SingleResponse<Account>) => {
+    $q.notify({
+      type: 'positive',
+      message: 'Login successful',
+      position: 'top',
+    })
 
-  router.push('/')
+    router.push('/')
+  }).catch((error) => {
+    $q.notify({
+      type: 'negative',
+      message: error.message,
+      position: 'top',
+    })
+
+    router.push('/agent/login')
+  })
 }
 </script>
 

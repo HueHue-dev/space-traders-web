@@ -1,4 +1,4 @@
-import Axios, { type AxiosInstance } from 'axios'
+import Axios, { type AxiosError, type AxiosInstance } from 'axios'
 import {
   type AxiosCacheInstance,
   setupCache,
@@ -6,6 +6,7 @@ import {
   type CacheAxiosResponse,
 } from 'axios-cache-interceptor'
 import Bottleneck from 'bottleneck'
+import { ApiError } from '@/exceptions/ApiResponseEroor.ts'
 
 export enum RequestType {
   GET = 'GET',
@@ -22,6 +23,10 @@ export interface PaginatedResponse<T> {
     page: number
     limit: number
   }
+}
+
+export interface SingleResponse<T> {
+  data: T[]
 }
 
 export interface PostResponse<T> {
@@ -59,6 +64,32 @@ export abstract class BaseApiService {
   protected async get<T>(
     url: string,
     ttl: number,
+  ): Promise<SingleResponse<T>> {
+    return await this.limiter.schedule(async () => {
+      try {
+        const response: CacheAxiosResponse = await this.axios.get(
+          this.baseUrl + url,
+          {
+            method: RequestType.GET,
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+              'Content-Type': 'application/json',
+            },
+            id: url.replace('/', '-'),
+            cache: this.getCacheConfig(ttl),
+          },
+        )
+        return { data: response.data.data }
+      }catch (e: any) {
+        const error = e.response.data.error;
+        throw new ApiError(error.message, error.code)
+      }
+    })
+  }
+
+  protected async getPaginated<T>(
+    url: string,
+    ttl: number,
     page: number,
     limit: number = 5,
   ): Promise<PaginatedResponse<T>> {
@@ -75,9 +106,7 @@ export abstract class BaseApiService {
           cache: this.getCacheConfig(ttl),
         },
       )
-      if (response.status === 400) {
-        throw new Error('invalid username or token')
-      }
+
       if (!response.cached) {
         response.data.meta.date = new Date('2015-03-25T12:00').toLocaleString()
       }
@@ -99,10 +128,6 @@ export abstract class BaseApiService {
           'Content-Type': 'application/json',
         },
       })
-
-      if (response.status === 400) {
-        throw new Error('invalid username or token')
-      }
 
       return { data: response.data.data }
     })

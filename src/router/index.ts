@@ -9,6 +9,7 @@ import { authService } from '@/services/AuthService.ts'
 import { configService } from '@/services/ConfigService.ts'
 import Agents from '@/views/Agents.vue'
 import Ships from '@/views/Ships.vue'
+import { useQuasar } from 'quasar'
 
 const requireAccountAuthRoute: RouteRecordNameGeneric[] = ['Account']
 
