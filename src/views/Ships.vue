@@ -127,7 +127,13 @@ const getStatusColor = (status: string) => {
 
       <template #body-cell-role="props">
         <q-td :props="props">
-          <q-badge :label="props.row.registration.role" color="primary" />
+          <q-chip
+            :label="props.row.registration.role"
+            color="primary"
+            text-color="white"
+            dense
+            square
+          />
         </q-td>
       </template>
 
@@ -153,7 +159,13 @@ const getStatusColor = (status: string) => {
 
       <template #body-cell-flightMode="props">
         <q-td :props="props">
-          <q-badge :label="props.row.nav.flightMode" color="secondary" />
+          <q-chip
+            :label="props.row.nav.flightMode"
+            color="secondary"
+            text-color="white"
+            dense
+            square
+          />
         </q-td>
       </template>
 
