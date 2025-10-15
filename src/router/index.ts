@@ -71,6 +71,14 @@ const router = createRouter({
       meta: { title: 'Logout' },
       beforeEnter: () => {
         authService.clearAll()
+        const $q = useQuasar()
+        $q.notify(
+          {
+            type: 'positive',
+            message: 'Logout successful',
+            position: 'top',
+          },
+        )
         router.push('/')
       },
     },
