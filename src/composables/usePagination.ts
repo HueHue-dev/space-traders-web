@@ -2,8 +2,6 @@ import type { PaginatedResponse } from '@/services/api/BaseApiService.ts'
 import { type Ref, ref } from 'vue'
 import { useQuasar } from 'quasar'
 
-const $q = useQuasar()
-
 export interface PaginationState {
   sortBy: string
   descending: boolean
@@ -16,6 +14,7 @@ export function usePagination<T>(
   fetchFunction: (page: number, limit: number) => Promise<PaginatedResponse<T>>,
   initialSortBy: string = 'name',
 ) {
+  const $q = useQuasar()
   const data = ref<T[]>([]) as Ref<T[]>
   const loading = ref(false)
   const lastUpdated = ref('')
