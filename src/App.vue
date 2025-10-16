@@ -20,39 +20,39 @@ type MenuListItem = {
 
 const menuList: MenuListItem[] = [
   {
-    icon: 'inbox',
+    icon: 'perm_identity',
     label: 'Account - coming soon',
     separator: true,
     link: '/account',
     isDisabled: true,
   },
   {
-    icon: 'send',
+    icon: 'dashboard',
     label: 'Dashboard',
     separator: false,
     link: '/',
   },
   {
-    icon: 'send',
+    icon: 'perm_identity',
     label: 'My agent - coming soon',
     separator: false,
     link: '/',
     isDisabled: true,
   },
   {
-    icon: 'send',
+    icon: 'description',
     label: 'Contracts',
     separator: false,
     link: '/contracts',
   },
   {
-    icon: 'send',
+    icon: 'rocket',
     label: 'Ships',
     separator: true,
     link: '/ships',
   },
   {
-    icon: 'send',
+    icon: 'people_outline',
     label: 'Agents',
     separator: false,
     link: '/agents',
